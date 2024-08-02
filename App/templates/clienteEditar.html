@@ -1,0 +1,74 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+<form method="post" action="{{ url_for('clienteActualizar', id=cliente['id_cliente']) }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <header>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+        <div class="logo">ROLKAR</div>
+            <nav class="nav-bar">
+                
+                <form action="{{ url_for('dashboardProductos') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Productos</button>
+                </form>
+    
+                <form action="{{ url_for('dashboardProveedores') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Proveedores</button>
+                </form>
+                
+                <select id="product-menu">
+                    <option value="usuario">Clientes</option>
+                </select>
+    
+                <form action="{{ url_for('dashboardUsuarios') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Usuarios</button>
+                </form>        
+                <button>Reportes</button>
+            </nav>
+            <div class="user-info">
+                <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+                <div class="user-icon"></div>
+                <div id="dropdown-menu" class="dropdown-content">
+                    <a href="#" id="logout">Cerrar sesión</a>
+                    <a href="#" id="help">Ayuda</a>
+                </div>
+            </div>
+    </header>
+    <main>
+        <h1>Editar Cliente</h1>
+        <div class="form-container">
+            <label for="id_cliente">ID Cliente</label>
+            <input type="text" id="id_cliente" name="id_cliente" placeholder="ID Cliente" value="{{ cliente['id_cliente'] }}">
+            
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{{ cliente['nombre'] }}">
+
+            <label for="paterno">Apellido Paterno</label>
+            <input type="text" id="paterno" name="paterno" placeholder="Apellido Paterno" value="{{ cliente['ape_pat'] }}">
+
+            <label for="materno">Apellido Materno</label>
+            <input type="text" id="materno" name="materno" placeholder="Apellido Materno" value="{{ cliente['ape_mat'] }}">
+            
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" placeholder="Dirección" value="{{ cliente['direccion'] }}">
+
+            <label for="telefono">Teléfono</label>
+            <input type="number" id="telefono" name="telefono" placeholder="Teléfono" value="{{ cliente['telefono'] }}">
+
+            <label for="correo">Correo Electrónico</label>
+            <input type="email" id="correo" name="correo" placeholder="Correo Electrónico" value="{{ cliente['correo'] }}">
+
+            <label for="cp">Código Postal</label>
+            <input type="text" id="cp" name="cp" placeholder="Código Postal" value="{{ cliente['cp'] }}">
+            
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardClientes')}}">
+                    Cancelar
+                </a>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+</form>
+{% endblock %}

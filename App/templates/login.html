@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilosIndex.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BIENVENIDOS A NUTRIMENTOS ROLKAR</h1>
+        </div>
+        <br>
+        <div class="login-box">
+            <div class="avatar">
+                <img src="{{ url_for('static', filename= 'img/avatar.jpg')}}" alt="Aqui deberia haber una imagen">
+            </div>
+            <form method="POST" action="{{url_for('loguear')}}">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <br>
+                <label for="username">Usuario</label>
+                <input type="text" id="username" name="username" placeholder="Usuario">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="••••••••">
+                <br>
+                <button type="submit">Iniciar sesión</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

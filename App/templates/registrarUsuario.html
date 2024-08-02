@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROLKAR - Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+
+            <a href="{{url_for('productos')}}"><button>Productos</button></a>
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <select id="product-menu">
+                <option value="usuario">Usuario</option>
+            </select>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Agregar un Nuevo Usario</h1>
+        <div class="form-container">
+            <label for="id_producto">ID Usuario</label>
+            <input type="text" id="id-producto" placeholder="Id">
+            
+            <label for="marca">Nombre Usuario</label>
+            <input type="text" id="marca" placeholder="Nombre">
+            
+            <label for="categoria">Tipo Usuario</label>
+            <input type="text" id="categoria" placeholder="Tipo">
+
+            <label for="categoria">Teléfono</label>
+            <input type="text" id="categoria" placeholder="Telefono">
+
+            <label for="categoria">Correo Electronico</label>
+            <input type="text" id="categoria" placeholder="Correo electronico ">
+            
+            <label for="categoria">Dirección</label>
+            <input type="text" id="categoria" placeholder="Dirección">
+
+           <center> <button id="add-product">Guardar</button><button id="add-other">Cancelar</button></center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+</body>
+</html>

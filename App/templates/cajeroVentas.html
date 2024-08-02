@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ventas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Ventas</h1>
+        <input type="text" id="product-search" placeholder="Buscar producto">
+        <button onclick="addProduct()">Agregar Producto</button>
+        <table id="sales-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="sales-body">
+            </tbody>
+        </table>
+        <div class="totals">
+            <p>Total de la venta: <span id="total-venta">0.00</span></p>
+            <p>Pago: <input type="number" id="pago" step="0.01"></p>
+            <p>Cambio: <span id="cambio">0.00</span></p>
+            <button onclick="guardarTicket()">Guardar e Imprimir Ticket</button>
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cajero - Registro de Gastos</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Cajero - Registro de Gastos</h1>
+        <div class="expense-form">
+            <input type="text" id="expense-description" placeholder="Descripción del gasto">
+            <input type="number" id="expense-amount" placeholder="Monto del gasto">
+            <select id="expense-type">
+                <option value="" disabled selected>Tipo de gasto</option>
+                <option value="Alquiler">Alquiler</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Materiales">Materiales</option>
+                <option value="Otros">Otros</option>
+            </select>
+            <button onclick="addExpense()">Registrar Gasto</button>
+        </div>
+        <table id="expenses-table">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Tipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Gastos añadidos se mostrarán aquí -->
+            </tbody>
+        </table>
+        <div class="total">
+            <strong>Total de Gastos: $<span id="total-expenses">0.00</span></strong>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

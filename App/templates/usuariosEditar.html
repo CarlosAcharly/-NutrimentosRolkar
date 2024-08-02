@@ -1,0 +1,53 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+<form method="post" action="{{ url_for('usuariosActualizar', id=usuario[0]) }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <select id="product-menu">
+                <option value="usuario">Usuario</option>
+            </select>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Editar Usuario</h1>
+        <div class="form-container">
+            <label for="id_usuario">ID Usuario</label>
+            <input type="text" id="id-usuario" placeholder="id usuario" name="id_usuario" value="{{ usuario[0] }}">
+            
+            <label for="nombre">Username</label>
+            <input type="text" id="nombre" placeholder="Nombre" name="nombre"value=" {{ usuario[1] }} ">
+
+            <label for="paterno">Password</label>
+            <input type="text" id="paterno" placeholder="Apellido paterno " name="paterno" value="{{ usuario[2] }}">
+
+            <label for="materno">Tipo de Usuario</label>
+            <input type="text" id="materno" placeholder="Apellido Materno" name="materno" value="{{ usuario[3] }}">
+            
+            <label for="direccion">Activar</label>
+            <input type="boolean" id="direccion" placeholder="Dirección" name="direccion" value="{{ usuario[4] }}">
+
+           
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardUsuarios')}}">
+                    Cancelar
+                </a>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+{% endblock %}

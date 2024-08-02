@@ -1,0 +1,48 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+<form method="post" action="{{ url_for('categoriasActualizar', id=categoria[0]) }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <select id="product-menu">
+                <option value="usuario">Usuario</option>
+            </select>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Editar una  Categoria</h1>
+        <div class="form-container">
+            <label for="id_categoria">ID Categoria</label>
+            <input type="number" id="id_categoria" placeholder="id categoria" name="id_categoria" value="{{ categoria[0] }}">
+            
+            <label for="especie">Especie</label>
+            <input type="text" id="especie" placeholder="Especie" name="especie" value="{{ categoria[1] }}">
+
+            <label for="tipo">Tipo</label>
+            <input type="text" id="tipo" placeholder=" Tipo " name="tipo" value="{{ categoria[2] }}">
+
+            <label for="presentacion">Presentación</label>
+            <input type="text" id="presentacion" placeholder=" Presentación" name="presentacion" value="{{ categoria[3] }}">
+            
+            
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <button id="add-other" type="button">Cancelar</button>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+{% endblock %}

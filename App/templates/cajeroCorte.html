@@ -1,0 +1,94 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+    <div class="container">
+        <h1>Corte de Caja</h1>
+        <div class="form-section">
+            <div class="input-group">
+                <label for="cajero">Nombre del Cajero:</label>
+                <input type="text" id="cajero" placeholder="Ingrese su nombre">
+            </div>
+        </div>
+        <div class="date-time-section">
+            <div class="input-group">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha">
+            </div>
+            <div class="input-group">
+                <label for="hora">Hora:</label>
+                <input type="time" id="hora">
+            </div>
+        </div>
+        <div class="form-section">
+            <label for="ventas">Número de Billetes y Monedas:</label>
+            <div id="billetes-monedas" class="two-columns">
+                <div class="input-group">
+                    <label for="billetes1000">Billetes de $1000:</label>
+                    <input type="number" id="billetes1000" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="billetes500">Billetes de $500:</label>
+                    <input type="number" id="billetes500" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="billetes200">Billetes de $200:</label>
+                    <input type="number" id="billetes200" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="billetes100">Billetes de $100:</label>
+                    <input type="number" id="billetes100" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="billetes50">Billetes de $50:</label>
+                    <input type="number" id="billetes50" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="billetes20">Billetes de $20:</label>
+                    <input type="number" id="billetes20" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas20">Monedas de $20:</label>
+                    <input type="number" id="monedas20" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas10">Monedas de $10:</label>
+                    <input type="number" id="monedas10" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas5">Monedas de $5:</label>
+                    <input type="number" id="monedas5" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas2">Monedas de $2:</label>
+                    <input type="number" id="monedas2" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas1">Monedas de $1:</label>
+                    <input type="number" id="monedas1" value="0" min="0">
+                </div>
+                <div class="input-group">
+                    <label for="monedas050">Monedas de $0.50:</label>
+                    <input type="number" id="monedas050" value="0" min="0">
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="small-button" onclick="calcularVentas()">Calcular</button>
+                <button class="large-button" onclick="guardarCorte()">Guardar Corte</button>
+                <button class="large-button" onclick="imprimirCorte()">Imprimir</button>
+            </div>
+        </div>
+        <div class="form-section">
+            <label for="gasto" class="small-label">Agregar Gasto:</label>
+            <div class="input-group">
+                <input type="number" id="gasto" placeholder="Monto del gasto">
+                <button class="large-button" onclick="agregarGasto()">Agregar</button>
+            </div>
+        </div>
+        <div class="results">
+            <h2>Resultados:</h2>
+            <p id="totalVentas">Total Ventas: $0.00</p>
+            <p id="totalGastos">Total Gastos: $0.00</p>
+            <p id="saldoNeto">Saldo Neto: $0.00</p>
+        </div>
+    </div>
+{% endblock %}

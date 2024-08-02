@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROLKAR - Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <select id="product-menu">
+            <option value="usuario">Producto</option>
+        </select>
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <button>Usuario</button>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Editar Producto</h1>
+        <div class="form-container">
+            <label for="id_producto">ID Producto</label>
+            <input type="text" id="id-producto" placeholder="Id">
+            
+            <label for="marca">Nombre Producto</label>
+            <input type="text" id="marca" placeholder="Nombre">
+            
+            <label for="categoria">Marca del Producto</label>
+            <input type="text" id="categoria" placeholder="Marca">
+
+            <label for="categoria">Cantidad del Producto</label>
+            <input type="text" id="categoria" placeholder="Cantidad">
+
+            <label for="categoria">Fecha de caducidad</label>
+            <input type="text" id="categoria" placeholder="Fecha caducidad ">
+            
+           <center> <button id="add-product">Guardar</button><button id="add-other">Cancelar</button></center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+</body>
+</html>

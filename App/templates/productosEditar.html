@@ -1,0 +1,64 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{ titulo }} {% endblock %}
+{% block body %}
+<form method="post" action="{{ url_for('productosActualizar', id=producto[0]) }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <select id="product-menu">
+                <option value="usuario">Producto</option>
+            </select>
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <button>Usuario</button>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Editar Producto</h1>
+        <div class="form-container">
+            <label for="id_producto">ID Producto</label>
+            <input type="text" id="id-producto" placeholder="id_producto" name="id_producto" value="{{ producto[0] }}">
+            
+            <label for="nombre">Nombre Producto</label>
+            <input type="text" id="nombre" placeholder="Nombre" name="nombre" value="{{ producto[1] }}">
+            
+            <label for="marca">Marca del Producto</label>
+            <input type="text" id="marca" placeholder="Marca" name="marca" value="{{ producto[2] }}">
+
+            <label for="precio">Precio del Producto</label>
+            <input type="number" id="precio" placeholder="Precio" name="precio" value="{{ producto[3] }}">
+
+            <div class="form-group mb-3">
+                <label for="formFile" class="form-label">Foto de Producto</label>
+                <div class="input-group">
+                  <input type="file" class="form-control" name="Foto" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required accept="image/png, .jpeg, .jpg">
+                  <button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Actualizar</button>
+                </div>
+            <input type="hidden" name="anterior" value="{{producto.7}}">
+
+            <label for="categoria">Categoría</label>
+            <input type="text" id="categoria" placeholder="Categoria" name="categoria" value="{{ producto[4] }}">
+
+            <label for="fecha_caducidad">Fecha de caducidad</label>
+            <input type="date" id="fecha_caducidad" placeholder="Fecha caducidad" name="fecha_caducidad" value="{{ producto[4] }}">
+            
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardProductos')}}">
+                    Cancelar
+                </a>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+{% endblock %}

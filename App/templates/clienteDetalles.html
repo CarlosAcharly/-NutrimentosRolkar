@@ -1,0 +1,20 @@
+{% extends './layout_admin.html' %}
+{% block title %} Inicio chido {% endblock %}
+{% block body %}
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ cliente[1] }} {{ cliente[2] }} {{ cliente[3] }} {{ cliente[4] }} {{ cliente[5] }} {{ cliente[6] }} {{ cliente[7] }} </h5>
+                <p class="card-text"><small class="text-muted">Última edición: {{ cliente[1] }}</small></p>
+                <p class="card-text"><small class="text-muted">Fecha de creación: {{ cliente[2] }}</small></p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <a href="{{ url_for('clienteEditar', id=cliente[0]) }}" class="btn btn-primary">Editar</a>
+  <a href="{{ url_for('dashboardClientes') }}" class="btn btn-danger">Atras</a>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends './layout.html' %}
+{% block title %} Inicio chido {% endblock %}
+{% block body %}
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">{{ categoria[1] }} {{ categoria[2] }} {{ categoria[3] }} </h5>
+                <p class="card-text"><small class="text-muted">Última edición: {{ categoria[1] }}</small></p>
+                <p class="card-text"><small class="text-muted">Fecha de creación: {{ categoria[2] }}</small></p>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <a href="{{ url_for('categoriasEditar', id=categoria[0]) }}" class="btn btn-primary">Editar</a>
+  <a href="{{ url_for('dashboardCategorias') }}" class="btn btn-danger">Atras</a>
+{% endblock %}

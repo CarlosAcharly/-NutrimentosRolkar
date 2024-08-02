@@ -1,0 +1,64 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+<form method="post" action="{{url_for('proveedoresCrear')}}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <select id="product-menu">
+                <option value="usuario">Proveedores</option>
+            </select>
+            <button>Clientes</button>
+            <button>Usuaio</button>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Agregar un Proveedor Nuevo </h1>
+        <div class="form-container">
+            <label for="id_proveedor">ID Proveedor</label>
+            <input type="number" id="id_proveedor" placeholder="id_proveedor" name="id_proveedor">
+            
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Nombre" name="nombre">
+
+            <label for="paterno">Apellido Paterno</label>
+            <input type="text" id="paterno" placeholder="Apellido paterno " name="paterno">
+
+            <label for="materno">Apellido Materno</label>
+            <input type="text" id="materno" placeholder="Apellido Materno" name="materno">
+            
+            <label for="marca">Marca</label>
+            <input type="text" id="marca" placeholder="Marca" name="marca">
+
+            <label for="telefono">Telefono</label>
+            <input type="number" id="telefono" placeholder="Telefono" name="telefono">
+
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" placeholder="Dirección" name="direccion">
+
+            <label for="correo">Correo electronico</label>
+            <input type="text" id="correo" placeholder="Correo" name="correo">
+
+            <label for="cp">Codigo Postal</label>
+            <input type="number" id="cp" placeholder="Codigo Postal" name="cp">
+            
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardProveedores')}}">
+                    Cancelar
+                </a>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+{% endblock %}

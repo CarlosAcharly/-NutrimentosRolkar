@@ -1,0 +1,66 @@
+{% extends './layout_cyk.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+
+<form method="post" action="{{ url_for('proveedoresActualizar', id=proveedor[0]) }}" enctype="multipart/form-data">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <header>
+        <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            <button>Proveedores</button>
+            <button>Clientes</button>
+            <select id="product-menu">
+                <option value="usuario">Usuario</option>
+            </select>
+            <button>Reportes</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h1>Editar Proveedor</h1>
+        <div class="form-container">
+            <label for="id_proveedor">ID Proveedor</label>
+            <input type="text" id="id_proveedor" placeholder="ID Proveedor" name="id_proveedor" value="{{ proveedor[0] }}">
+            
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Nombre" name="nombre" value="{{ proveedor[1] }}">
+
+            <label for="paterno">Apellido Paterno</label>
+            <input type="text" id="paterno" placeholder="Apellido Paterno" name="paterno" value="{{ proveedor[2] }}">
+
+            <label for="materno">Apellido Materno</label>
+            <input type="text" id="materno" placeholder="Apellido Materno" name="materno" value="{{ proveedor[3] }}">
+            
+            <label for="marca">Marca</label>
+            <input type="text" id="marca" placeholder="Marca" name="marca" value="{{ proveedor[4] }}">
+
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" placeholder="Teléfono" name="telefono" value="{{ proveedor[5] }}">
+
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" placeholder="Dirección" name="direccion" value="{{ proveedor[6] }}">
+
+            <label for="correo">Correo Electrónico</label>
+            <input type="text" id="correo" placeholder="Correo Electrónico" name="correo" value="{{ proveedor[7] }}">
+
+            <label for="cp">Código Postal</label>
+            <input type="text" id="cp" placeholder="Código Postal" name="cp" value="{{ proveedor[8] }}">
+            
+            <center>
+                <button id="add-product" type="submit">Guardar</button>
+                <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardProveedores')}}">
+                    Cancelar
+                </a>
+            </center>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+</form>
+{% endblock %}
