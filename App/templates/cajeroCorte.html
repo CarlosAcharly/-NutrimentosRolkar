@@ -1,6 +1,35 @@
-{% extends './layout_cyk.html' %}
+{% extends './layoutCajero.html' %}
 {% block title %} {{titulo}} {% endblock %}
 {% block body %}
+<header>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+    <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            
+            <form action="{{ url_for('dashboardProductos') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Productos</button>
+            </form>
+            <select id="product-menu">
+                <option value="usuario">Corte de Caja</option>
+            </select>
+
+            <form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Clientes</button>
+            </form>
+                <form action="{{ url_for('cajeroVentas') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Ventas</button>
+                </form>
+                    <button>Gastos</button>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Cajero@Rol</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+</header>
     <div class="container">
         <h1>Corte de Caja</h1>
         <div class="form-section">

@@ -472,26 +472,23 @@ def dashboardUsuarios():
 @app.route("/usuarios_nuevo")
 @login_required
 def usuariosNuevo():
-    return render_template('registrarUsuario.html')
+    return render_template('usuariosNuevo.html')
 
 @app.route('/dashboard/usuarios/crear', methods=('GET', 'POST'))
 @login_required
 def usuariosCrear():
     if request.method == 'POST':
         id_usuario=request.form['id_usuario']
-        nombre = request.form['nombre']
-        paterno = request.form['paterno']
-        materno = request.form['materno']
-        direccion = request.form['direccion']
-        telefono = request.form['telefono']
-        correo = request.form['correo']
-        rol = request.form['rol']
+        username = request.form['username']
+        password = request.form['password']
+        tipo_usuario = request.form['tipo_usuario']
+        activo= request.form['activo']
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO usuarios ( id_usuario, username, tipo_usuario, activo, creado, editado)'
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (id_usuario, nombre, paterno, materno,direccion, telefono, correo, rol))
+        cur.execute('INSERT INTO usuarios ( id_usuario,username,password, tipo_usuario, activo)'
+                    'VALUES (%s, %s, %s, %s, %s)',
+                    (id_usuario, username, password, tipo_usuario, activo))
         conn.commit()
         cur.close()
         conn.close()
@@ -520,20 +517,16 @@ def usuariosEditar(id):
 def usuariosActualizar(id):
     if request.method == 'POST':
         id_usuario=request.form['id_usuario']
-        nombre = request.form['nombre']
-        paterno = request.form['paterno']
-        materno = request.form['materno']
-        direccion = request.form['direccion']
-        telefono = request.form['telefono']
-        correo = request.form['correo']
-        rol = request.form['rol']
+        username = request.form['username']
+        password = request.form['password']
+        tipo_usuario = request.form['tipo_usuario']
+        activo= request.form['activo']
         
-
 
         conn = get_db_connection()
         cur = conn.cursor()
-        sql="UPDATE usuarios SET nombre=%s, ape_pat=%s, ape_mat=%s, direccion=%s, telefono=%s , correo=%s, rol=%s WHERE id_usuario=%s"        
-        valores=( nombre, paterno, materno, direccion, telefono, correo, rol, id_usuario)
+        sql="UPDATE usuarios SET username=%s, password=%s, tipo_usuario=%s, activo=%s"        
+        valores=( username, password, tipo_usuario, activo)
         cur.execute(sql,valores)
         conn.commit()
         cur.close()

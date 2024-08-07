@@ -1,12 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Ventas</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+{% extends './layoutCajero.html' %}
+{% block title %} {{titulo}} {% endblock %}
+{% block body %}
+<header>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+    <div class="logo">ROLKAR</div>
+        <nav class="nav-bar">
+            
+            <form action="{{ url_for('dashboardProductos') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Productos</button>
+            </form>
+
+                <form action="{{ url_for('cajeroCorte') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Corte de caja</button>
+                </form>
+
+            <form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Clientes</button>
+            </form>
+                    <select id="product-menu">
+                        <option value="usuario">Ventas</option>
+                    </select>
+
+             <form action="{{ url_for('cajeroGastos') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Gastos</button>
+            </form>
+        </nav>
+        <div class="user-info">
+            <span id="user-dropdown" class="dropdown">Cajero@Rol</span>
+            <div class="user-icon"></div>
+            <div id="dropdown-menu" class="dropdown-content">
+                <a href="#" id="logout">Cerrar sesión</a>
+                <a href="#" id="help">Ayuda</a>
+            </div>
+        </div>
+</header>
     <div class="container">
         <h1>Sistema de Ventas</h1>
         <input type="text" id="product-search" placeholder="Buscar producto">
@@ -32,5 +59,4 @@
         </div>
     </div>
     <script src="scripts.js"></script>
-</body>
-</html>
+{% endblock %}
