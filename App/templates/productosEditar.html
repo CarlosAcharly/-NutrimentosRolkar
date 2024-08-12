@@ -38,16 +38,32 @@
             <label for="precio">Precio del Producto</label>
             <input type="number" id="precio" placeholder="Precio" name="precio" value="{{ producto[3] }}">
 
-            <div class="form-group mb-3">
-                <label for="formFile" class="form-label">Foto de Producto</label>
-                <div class="input-group">
-                  <input type="file" class="form-control" name="Foto" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" required accept="image/png, .jpeg, .jpg">
-                  <button class="btn btn-outline-primary" type="submit" id="inputGroupFileAddon04">Actualizar</button>
-                </div>
+            
             <input type="hidden" name="anterior" value="{{producto.7}}">
 
-            <label for="categoria">Categoría</label>
-            <input type="text" id="categoria" placeholder="Categoria" name="categoria" value="{{ producto[4] }}">
+            <label for="categoria">Categoria asignada</label>
+   <select class="form-select" aria-label="Default select example" name="id_categoria">
+     <option selected>--Selecciona una categoria--</option>
+       {% if categorias %}
+       {% for categoria in categorias %}
+       <option value="{{categoria.0}}">{{categoria.1}}</option>
+       {% endfor %}
+       {% else %}
+       <option>No hay nada</option>
+       {% endif %}
+   </select>
+
+<label for="categoria">Porveedor asignado</label>
+<select class="form-select" aria-label="Default select example" name="id_proveedor">
+  <option selected>--Selecciona un proveedor--</option>
+    {% if proveedores %}
+    {% for proveedor in proveedores %}
+    <option value="{{proveedor.0}}">{{proveedor.1}}</option>
+    {% endfor %}
+    {% else %}
+    <option>No hay nada</option>
+    {% endif %}
+   </select>
 
             <label for="fecha_caducidad">Fecha de caducidad</label>
             <input type="date" id="fecha_caducidad" placeholder="Fecha caducidad" name="fecha_caducidad" value="{{ producto[4] }}">

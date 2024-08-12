@@ -39,22 +39,34 @@
             <label for="categoria">Precio del Producto</label>
             <input type="number" id="precio" placeholder="Precio" name="precio">
             
-            <div class="form-group mb-3">
+            <!---<div class="form-group mb-3">
                 <label for="formFile" class="form-label">Foto de Producto</label>
                 <input class="form-control" type="file" id="formFile" name="Foto" required accept="image/png, .jpeg, .jpg">
-              </div>
+              </div>--->
 
             <label for="categoria">Categoria</label>
-   <select class="form-select" aria-label="Default select example" name="id_profesor">
+   <select class="form-select" aria-label="Default select example" name="id_categoria">
      <option selected>--Selecciona una Categoría--</option>
-       {% if categoria %}
-       {% for categoria in categoria %}
-       <option value="{{categoria.0}}">{{categoria.1}}{{categoria.2}}</option>
+       {% if categorias %}
+       {% for categoria in categorias %}
+       <option value="{{categoria.0}}">{{categoria.1}}</option>
        {% endfor %}
        {% else %}
        <option>No hay nada</option>
        {% endif %}
    </select>
+
+<label for="categoria">Porveedor asignado</label>
+         <select class="form-select" aria-label="Default select example" name="id_proveedor">
+           <option selected>--Selecciona un proveedor--</option>
+             {% if proveedores %}
+             {% for proveedor in proveedores %}
+             <option value="{{proveedor.0}}">{{proveedor.1}}</option>
+             {% endfor %}
+             {% else %}
+             <option>No hay nada</option>
+             {% endif %}
+         </select>
 
             <label for="categoria">Fecha de caducidad</label>
             <input type="date" id="fecha_caducidad" placeholder="Fecha caducidad " name="fecha_caducidad">

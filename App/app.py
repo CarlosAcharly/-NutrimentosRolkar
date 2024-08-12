@@ -123,11 +123,11 @@ def dashboardProductos():
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     # Obtener el número total de productos
-    cur.execute('SELECT COUNT(*) FROM productos')
+    cur.execute('SELECT COUNT(*) FROM vista_productos')
     total_items = cur.fetchone()['count']
 
     # Obtener los productos con límite y offset
-    cur.execute('SELECT * FROM productos LIMIT %s OFFSET %s', (per_page, offset))
+    cur.execute('SELECT * FROM vista_productos LIMIT %s OFFSET %s', (per_page, offset))
     productos = cur.fetchall()
 
     cur.close()
@@ -151,6 +151,7 @@ def dashboardProductos():
 def productosNuevo():
     return render_template('productosNuevo.html', categorias=listar_categorias(),proveedores=listar_proveedores())
 
+
 @app.route('/dashboard/productos/crear', methods=('GET', 'POST'))
 @login_required
 def productosCrear():
@@ -162,19 +163,7 @@ def productosCrear():
         fecha_caducidad = request.form['fecha_caducidad']
         proveedor = request.form['id_proveedor']
         categoria = request.form['id_categoria']
-        imagen=request.files['Foto']
-
-        if imagen and allowed_file(imagen.filename):
-            # Verificar si el archivo con el mismo nombre ya existe
-            # Creamos un nombre dinamico para la foto de perfil con el nombre del alumno y una cadena aleatoria
-            cadena_aleatoria = my_random_string(10)
-            filename = paterno + "_" + materno + "_" + nombre + "_" + str(creado)[:10] + "_" + cadena_aleatoria + "_" + secure_filename(imagen.filename)
-            file_path = os.path.join(ruta_alumnos, filename)
-            if os.path.exists(file_path):
-                flash('Error: ¡Un archivo con el mismo nombre ya existe! Intente renombrar su archivo.')
-                return redirect(url_for('alumnos_dashboard'))
-            # Guardar el archivo y registrar en la base de datos
-            imagen.save(file_path)
+        
 
         conn = get_db_connection()
         cur = conn.cursor()
@@ -190,8 +179,6 @@ def productosCrear():
         return redirect(url_for('dashboardProductos'))
 
     return redirect(url_for('productosNuevo'))
-
-
 
 @app.route("/productos_categoria")
 @login_required
@@ -810,6 +797,32 @@ def cajeroCorte():
 @login_required
 def cajeroGastos():
     return render_template('cajeroGastos.html')
+
+@app.route('/cajero/dashboardProductos')
+@login_required
+def cajeroProductos():
+    titulo = "Productos"
+    
+
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+   
+
+    # Obtener los productos con límite y offset
+    cur.execute('SELECT * FROM productos')
+    productos = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    
+    return render_template(
+        'cajeroProductos.html',
+        titulo=titulo,
+        productos=productos
+       
+    )
 
 #---------------LOGIN--------------------
 @app.route('/login')

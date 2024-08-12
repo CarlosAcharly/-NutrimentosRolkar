@@ -79,3 +79,83 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Ayuda');
     });    
 });
+// Simulación de una lista de productos. En un entorno real, esto vendría de una API.
+const productos = [
+    { id: 1, nombre: 'Producto 1', marca: 'Marca 1', precio: 10 },
+    { id: 2, nombre: 'Producto 2', marca: 'Marca 2', precio: 20 },
+    // Agregar más productos aquí
+];
+
+function searchProduct() {
+    const query = document.getElementById('product-search').value.toLowerCase();
+    const filteredProducts = productos.filter(producto => {
+        return producto.nombre.toLowerCase().includes(query) ||
+               producto.marca.toLowerCase().includes(query) ||
+               producto.precio.toString().includes(query);
+    });
+
+    const productsList = document.getElementById('products-list');
+    productsList.innerHTML = ''; // Limpiar la lista anterior
+    filteredProducts.forEach(producto => {
+        productsList.innerHTML += `
+            <tr>
+                <td>${producto.nombre}</td>
+                <td>${producto.marca}</td>
+                <td>${producto.precio}</td>
+                <td><button onclick="addToCart(${producto.id})">Agregar</button></td>
+            </tr>
+        `;
+    });
+}
+
+document.getElementById('product-search').addEventListener('input', searchProduct);
+let carrito = [];
+
+function addToCart(productId) {
+    const producto = productos.find(p => p.id === productId);
+    if (producto) {
+        carrito.push(producto);
+        updateSalesTable();
+    }
+}
+
+function updateSalesTable() {
+    const salesBody = document.getElementById('sales-body');
+    salesBody.innerHTML = ''; // Limpiar la tabla de ventas
+    let totalVenta = 0;
+    carrito.forEach((producto, index) => {
+        totalVenta += producto.precio;
+        salesBody.innerHTML += `
+            <tr>
+                <td>${producto.nombre}</td>
+                <td>${producto.marca}</td>
+                <td>${producto.precio}</td>
+                <td><button onclick="removeFromCart(${index})">Eliminar</button></td>
+            </tr>
+        `;
+    });
+    document.getElementById('total-venta').innerText = totalVenta.toFixed(2);
+}
+
+function removeFromCart(index) {
+    carrito.splice(index, 1);
+    updateSalesTable();
+}
+function guardarTicket() {
+    // Aquí enviarías los datos al servidor usando AJAX o Fetch API
+    fetch('/cajero/ventas', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ carrito: carrito })
+    }).then(response => {
+        if (response.ok) {
+            alert('Venta guardada e imprimida con éxito');
+            carrito = [];
+            updateSalesTable();
+        } else {
+            alert('Hubo un error al guardar la venta');
+        }
+    });
+}
