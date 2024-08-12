@@ -33,7 +33,7 @@
                 </div>
             </div>
     </header>
-    <form method="post" action="{{ url_for('clienteActualizar', id=cliente['id_cliente']) }}" enctype="multipart/form-data">
+    <form method="post" action="{{ url_for('clienteActualizar', id=cliente[0]) }}" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <main>
         <h1>Editar Cliente</h1>

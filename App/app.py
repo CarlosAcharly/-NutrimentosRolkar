@@ -470,8 +470,8 @@ def usuariosActualizar(id):
 
         conn = get_db_connection()
         cur = conn.cursor()
-        sql="UPDATE usuarios SET username=%s, password=%s, tipo_usuario=%s, activo=%s"        
-        valores=( username, password, tipo_usuario, activo)
+        sql="UPDATE usuarios SET username=%s, password=%s, tipo_usuario=%s, activo=%s WHERE id_usuario=%s"        
+        valores=( username, password, tipo_usuario, activo, id)
         cur.execute(sql,valores)
         conn.commit()
         cur.close()
