@@ -1,10 +1,9 @@
 {% extends './layout_cyk.html' %}
 {% block title %} {{titulo}} {% endblock %}
 {% block body %}
-<form method="post" action="{{ url_for('clienteActualizar', id=cliente['id_cliente']) }}" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
     <header>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
         <div class="logo">ROLKAR</div>
             <nav class="nav-bar">
                 
@@ -16,14 +15,14 @@
                     <button type="submit" class="btn btn-primary">Proveedores</button>
                 </form>
                 
-                <select id="product-menu">
-                    <option value="usuario">Clientes</option>
-                </select>
+                        <select id="product-menu">
+                            <option value="usuario">Clientes</option>
+                        </select>
     
                 <form action="{{ url_for('dashboardUsuarios') }}" method="get" style="display: inline;">
-                    <button type="submit" class="btn btn-primary">Usuarios</button>
-                </form>        
-                <button>Reportes</button>
+                        <button type="submit" class="btn btn-primary">Usuarios</button>
+                    </form>        
+                        <button>Reportes</button>
             </nav>
             <div class="user-info">
                 <span id="user-dropdown" class="dropdown">Admin@Uri</span>
@@ -34,32 +33,34 @@
                 </div>
             </div>
     </header>
+    <form method="post" action="{{ url_for('clienteActualizar', id=cliente['id_cliente']) }}" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <main>
         <h1>Editar Cliente</h1>
         <div class="form-container">
             <label for="id_cliente">ID Cliente</label>
-            <input type="text" id="id_cliente" name="id_cliente" placeholder="ID Cliente" value="{{ cliente['id_cliente'] }}">
+            <input type="text" id="id_cliente" name="id_cliente" placeholder="ID Cliente" value="{{ cliente[0] }}">
             
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" name="nombre" placeholder="Nombre" value="{{ cliente['nombre'] }}">
+            <input type="text" id="nombre" placeholder="Nombre" name="nombre" value="{{ cliente[1] }}">
 
             <label for="paterno">Apellido Paterno</label>
-            <input type="text" id="paterno" name="paterno" placeholder="Apellido Paterno" value="{{ cliente['ape_pat'] }}">
+            <input type="text" id="paterno" name="paterno" placeholder="Apellido Paterno" value="{{ cliente[2] }}">
 
             <label for="materno">Apellido Materno</label>
-            <input type="text" id="materno" name="materno" placeholder="Apellido Materno" value="{{ cliente['ape_mat'] }}">
+            <input type="text" id="materno" name="materno" placeholder="Apellido Materno" value="{{ cliente[3] }}">
             
             <label for="direccion">Dirección</label>
-            <input type="text" id="direccion" name="direccion" placeholder="Dirección" value="{{ cliente['direccion'] }}">
+            <input type="text" id="direccion" name="direccion" placeholder="Dirección" value="{{ cliente[4] }}">
 
             <label for="telefono">Teléfono</label>
-            <input type="number" id="telefono" name="telefono" placeholder="Teléfono" value="{{ cliente['telefono'] }}">
+            <input type="number" id="telefono" name="telefono" placeholder="Teléfono" value="{{ cliente[5] }}">
 
             <label for="correo">Correo Electrónico</label>
-            <input type="email" id="correo" name="correo" placeholder="Correo Electrónico" value="{{ cliente['correo'] }}">
+            <input type="email" id="correo" name="correo" placeholder="Correo Electrónico" value="{{ cliente[6] }}">
 
             <label for="cp">Código Postal</label>
-            <input type="text" id="cp" name="cp" placeholder="Código Postal" value="{{ cliente['cp'] }}">
+            <input type="text" id="cp" name="cp" placeholder="Código Postal" value="{{ cliente[7] }}">
             
             <center>
                 <button id="add-product" type="submit">Guardar</button>

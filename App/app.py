@@ -208,48 +208,6 @@ def productosActualizar(id):
         precio = request.form['precio']
        # categoria = request.form['categoria']
         fecha_caducidad = request.form['fecha_caducidad']
-        if request.method == 'POST' and current_user.tipo == True:
-         imagen=request.files['Foto']
-         nombre = request.form['nombre']
-         foto_anterior = request.form['anterior']
-         foto_anterior = os.path.join(ruta_alumnos,foto_anterior)
-         editado = datetime.now()
-
-        print("--------------------------------------------------------------------")
-        print(imagen)
-
-        if imagen and allowed_file(imagen.filename):
-            # Verificar si el archivo con el mismo nombre ya existe
-            # Creamos un nombre dinamico para la foto de perfil con el nombre del alumno y una cadena aleatoria
-            cadena_aleatoria = my_random_string(10)
-            filename =  nombre + "_" + str(editado)[:10] + "_" + cadena_aleatoria + "_" + secure_filename(imagen.filename)
-            file_path = os.path.join(ruta_alumnos, filename)
-            if os.path.exists(file_path):
-                flash('Error: ¡Un archivo con el mismo nombre ya existe! Intente renombrar su archivo.')
-                return redirect(url_for('alumnos_dashboard'))
-            # Guardar el archivo y registrar en la base de datos
-            imagen.save(file_path)
-            
-            conn = get_db_connection()
-            cur = conn.cursor()
-            sql=" UPDATE productos SET imagen=%s WHERE id_producto=%s"
-            valores=(filename,id)
-            cur.execute(sql,valores)
-            conn.commit()
-            cur.close()
-            conn.close()
-            
-            #Eliminar foto de perfil antigua
-            if request.form['anterior'] != "":
-                if os.path.exists(foto_anterior):
-                    os.remove(foto_anterior)
-
-            flash('¡Foto de perfil actualizada exitosamente!')
-            return redirect(url_for('productosEditar', id=id))
-        else:
-            flash('Error: ¡Extensión de archivo invalida! Intente con una imagen valida PNG, JPG o JPEG')
-            return redirect(url_for('productosEditar', id=id))
-
     
     conn = get_db_connection()
     cur = conn.cursor()

@@ -1,17 +1,24 @@
 {% extends './layout_cyk.html' %}
 {% block title %} {{titulo}} {% endblock %}
 {% block body %}
-<form method="post" action="{{url_for('productosCrear')}}" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
     <header>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
         <div class="logo">ROLKAR</div>
         <nav class="nav-bar">
             <select id="product-menu">
-            <option value="usuario">Producto</option>
-        </select>
-            <button>Proveedores</button>
-            <button>Clientes</button>
-            <button>Usuario</button>
+                <option value="usuario">Productos</option>
+            </select>
+            <form action="{{ url_for('dashboardProveedores') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Proveedores</button>
+            </form>
+            <form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Clientes</button>
+            </form>
+            <form action="{{ url_for('dashboardUsuarios') }}" method="get" style="display: inline;">
+                <button type="submit" class="btn btn-primary">Usuarios</button>
+            </form>
             <button>Reportes</button>
         </nav>
         <div class="user-info">
@@ -23,7 +30,8 @@
             </div>
         </div>
     </header>
-
+    <form method="post" action="{{url_for('productosCrear')}}" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <main>
         <h1>Agregar un Nuevo Producto</h1>
         <div class="form-container">
