@@ -19,7 +19,9 @@
                 <form action="{{ url_for('cajeroVentas') }}" method="get" style="display: inline;">
                     <button type="submit" class="btn btn-primary">Ventas</button>
                 </form>
-                    <button>Gastos</button>
+                <form action="{{ url_for('cajeroGastos') }}" method="get" style="display: inline;">
+                    <button type="submit" class="btn btn-primary">Gastos</button>
+                </form>
         </nav>
         <div class="user-info">
             <span id="user-dropdown" class="dropdown">Cajero@Rol</span>

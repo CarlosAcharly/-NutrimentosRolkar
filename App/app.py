@@ -13,6 +13,9 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from Models.ModelUser import ModelUser
 from Models.entities.user import User 
 
+from functools import wraps
+from flask import abort
+from flask_login import current_user
 
 app= Flask(__name__)
 csrf= CSRFProtect()
@@ -85,6 +88,18 @@ app.secret_key='mysecretkey'
 @login_required
 def inicioSesion():
     return render_template('login.html')
+#-------------------DECORADORES----------------------------------
+
+'''def role_required(rol):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if current_user.rol not in rol:
+                abort(403)  # Prohibido
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator'''
+
 #---------------------PAGINADOR-------------
 def paginador(sql_count,sql_lim,in_page,per_pages):
     page = request.args.get('page', in_page, type=int)
@@ -113,38 +128,47 @@ def paginador(sql_count,sql_lim,in_page,per_pages):
 @app.route("/dashboard_productos")
 @login_required
 def dashboardProductos():
-    titulo = "Productos"
-    page = request.args.get('page', 1, type=int)
-    per_page = request.args.get('per_page', 2, type=int)
+    if current_user.tipo == 'admin':
 
-    offset = (page - 1) * per_page
+        titulo = "Productos"
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 2, type=int)
+        search_query = request.args.get('search', '', type=str)
 
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
+        offset = (page - 1) * per_page
 
-    # Obtener el número total de productos
-    cur.execute('SELECT COUNT(*) FROM vista_productos')
-    total_items = cur.fetchone()['count']
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
 
-    # Obtener los productos con límite y offset
-    cur.execute('SELECT * FROM vista_productos LIMIT %s OFFSET %s', (per_page, offset))
-    productos = cur.fetchall()
+        # Obtener el número total de productos que coinciden con la búsqueda
+        cur.execute('SELECT COUNT(*) FROM vista_productos WHERE nombre_producto ILIKE %s OR marca ILIKE %s', 
+                    (f'%{search_query}%', f'%{search_query}%'))
+        total_items = cur.fetchone()['count']
 
-    cur.close()
-    conn.close()
+        # Obtener los productos con límite, offset y búsqueda
+        cur.execute('SELECT * FROM vista_productos WHERE nombre_producto ILIKE %s OR marca ILIKE %s LIMIT %s OFFSET %s',
+                    (f'%{search_query}%', f'%{search_query}%', per_page, offset))
+        productos = cur.fetchall()
 
-    total_pages = (total_items + per_page - 1) // per_page
+        cur.close()
+        conn.close()
 
-    return render_template(
-        'dashboardProductos.html',
-        titulo=titulo,
-        productos=productos,
-        page=page,
-        per_page=per_page,
-        total_items=total_items,
-        total_pages=total_pages
-    )
+        total_pages = (total_items + per_page - 1) // per_page
 
+        return render_template(
+            'dashboardProductos.html',
+            titulo=titulo,
+            productos=productos,
+            page=page,
+            per_page=per_page,
+            total_items=total_items,
+            total_pages=total_pages,
+            search_query=search_query
+        )
+    elif current_user.tipo == 'cajero':
+        return redirect(url_for('cajeroVentas'))
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/productos_nuevo")
 @login_required
@@ -287,14 +311,18 @@ def productosDetalles(id):
 @app.route("/dashboard_proveedores")
 @login_required
 def dashboardProveedores():
-    titulo = "Proveedores"
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM proveedor;')
-    proveedores = cur.fetchall()
-    cur.close()
-    conn.close()
-    return render_template('dashboardProveedores.html', titulo=titulo, proveedores=proveedores)
+    
+    if current_user.tipo == 'admin':
+        titulo = "Proveedores"
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM proveedor;')
+        proveedores = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('dashboardProveedores.html', titulo=titulo, proveedores=proveedores)
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/proveedor_nuevo")
 @login_required
@@ -405,15 +433,19 @@ def proveedorEliminar(id):
 @app.route("/dashboard_usuarios")
 @login_required
 def dashboardUsuarios():
-    titulo = "Usuarios"
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM usuarios;')
-    usuarios = cur.fetchall()
-    cur.close()
-    conn.close()
-    return render_template('dashboardUsuarios.html', titulo=titulo, usuarios=usuarios)
+    if current_user.tipo == 'admin':
 
+        titulo = "Usuarios"
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM usuarios;')
+        usuarios = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('dashboardUsuarios.html', titulo=titulo, usuarios=usuarios)
+    else:
+        return redirect(url_for('login'))
+    
 @app.route("/usuarios_nuevo")
 @login_required
 def usuariosNuevo():
@@ -423,17 +455,20 @@ def usuariosNuevo():
 @login_required
 def usuariosCrear():
     if request.method == 'POST':
-        id_usuario=request.form['id_usuario']
+        id_usuario = request.form['id_usuario']
         username = request.form['username']
         password = request.form['password']
         tipo_usuario = request.form['tipo_usuario']
-        activo= request.form['activo']
+        activo = request.form['activo']
+
+        # Hashear la contraseña antes de guardarla en la base de datos
+        password_hashed = generate_password_hash(password)
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO usuarios ( id_usuario,username,password, tipo_usuario, activo)'
+        cur.execute('INSERT INTO usuarios (id_usuario, username, password, tipo_usuario, activo)'
                     'VALUES (%s, %s, %s, %s, %s)',
-                    (id_usuario, username, password, tipo_usuario, activo))
+                    (id_usuario, username, password_hashed, tipo_usuario, activo))
         conn.commit()
         cur.close()
         conn.close()
@@ -516,15 +551,19 @@ def usuarioEliminar(id):
 @app.route("/dashboard_clientes")
 @login_required
 def dashboardClientes():
-    titulo = "Clientes"
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM cliente;')
-    clientes = cur.fetchall()
-    cur.close()
-    conn.close()
-    return render_template('dashboardCliente.html', titulo=titulo, cliente=clientes)
+    if current_user.tipo == 'admin':
 
+        titulo = "Clientes"
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM cliente;')
+        clientes = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('dashboardCliente.html', titulo=titulo, cliente=clientes)
+    else:
+        return redirect(url_for('login'))
+    
 @app.route("/cliente_nuevo")
 @login_required
 def clienteNuevo():
@@ -635,15 +674,19 @@ def clienteEliminar(id):
 @app.route("/dashboard_categoria")
 @login_required
 def dashboardCategorias():
-    titulo = "Categorias"
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM categorias;')
-    categorias = cur.fetchall()
-    cur.close()
-    conn.close()
-    return render_template('dashboardCategorias.html', titulo=titulo, categorias=categorias)
-    
+    if current_user.tipo == 'admin':
+
+        titulo = "Categorias"
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM categorias;')
+        categorias = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template('dashboardCategorias.html', titulo=titulo, categorias=categorias)
+    else:
+        return redirect(url_for('login'))
+        
 @app.route("/categorias_nuevo")
 @login_required
 def categoriasNuevo():
@@ -740,21 +783,38 @@ def categoriaEliminar(id):
     conn.close()
     flash('¡Categoria eliminado correctamente!')
     return redirect(url_for('dashboardCategorias'))
+#----------------------MENU---------------------------------------
+@app.route('/menu')
+@login_required
+def menu():
+    return render_template('menu.html')
+
 #-----------------------CAJERO---------------------------------------
 @app.route('/cajero/ventas')
 @login_required
 def cajeroVentas():
-    return render_template('cajeroVentas.html')
+        if current_user.tipo == 'cajero':
+         return render_template('cajeroVentas.html')
+        else:
+            return redirect(url_for('login'))
 
 @app.route('/cajero/corte')
 @login_required
 def cajeroCorte():
-    return render_template('cajeroCorte.html')
+        if current_user.tipo == 'cajero':
+
+            return render_template('cajeroCorte.html')
+        else:
+            return redirect(url_for('login'))
+
 
 @app.route('/cajero/gastos')
 @login_required
 def cajeroGastos():
-    return render_template('cajeroGastos.html')
+    if current_user.tipo == 'cajero':
+        return render_template('cajeroGastos.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/cajero/dashboardProductos')
 @login_required
@@ -802,12 +862,15 @@ def loguear():
             if loged_user.password:
                 login_user(loged_user)
                 return redirect(url_for('dashboardProductos'))
+
             else:
                 flash("Nombre de usuario y/o contraseña incorrecta.")
                 return redirect(url_for('login'))
         else:
-            flash("Nombre de usuario y/o conttraseña incorrecta.")
+            flash("Nombre de usuario y/o contraseña incorrecta.")
             return redirect(url_for('login'))
+   
+        
     
 @app.route('/logout')
 @login_required
