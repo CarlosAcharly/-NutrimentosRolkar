@@ -790,13 +790,7 @@ def menu():
     return render_template('menu.html')
 
 #-----------------------CAJERO---------------------------------------
-@app.route('/cajero/ventas')
-@login_required
-def cajeroVentas():
-        if current_user.tipo == 'cajero':
-         return render_template('cajeroVentas.html')
-        else:
-            return redirect(url_for('login'))
+
 
 @app.route('/cajero/corte')
 @login_required
@@ -819,28 +813,54 @@ def cajeroGastos():
 @app.route('/cajero/dashboardProductos')
 @login_required
 def cajeroProductos():
-    titulo = "Productos"
+    if current_user.tipo == 'cajero':
+
+        titulo = "Productos"
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 2, type=int)
+        search_query = request.args.get('search', '', type=str)
+
+        offset = (page - 1) * per_page
+
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+
+        # Obtener el número total de productos que coinciden con la búsqueda
+        cur.execute('SELECT COUNT(*) FROM vista_productos WHERE nombre_producto ILIKE %s OR marca ILIKE %s', 
+                    (f'%{search_query}%', f'%{search_query}%'))
+        total_items = cur.fetchone()['count']
+
+        # Obtener los productos con límite, offset y búsqueda
+        cur.execute('SELECT * FROM vista_productos WHERE nombre_producto ILIKE %s OR marca ILIKE %s LIMIT %s OFFSET %s',
+                    (f'%{search_query}%', f'%{search_query}%', per_page, offset))
+        productos = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        total_pages = (total_items + per_page - 1) // per_page
+
+        return render_template(
+            'cajeroProductos.html',
+            titulo=titulo,
+            productos=productos,
+            page=page,
+            per_page=per_page,
+            total_items=total_items,
+            total_pages=total_pages,
+            search_query=search_query
+        )
     
-
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-
-   
-
-    # Obtener los productos con límite y offset
-    cur.execute('SELECT * FROM productos')
-    productos = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    
-    return render_template(
-        'cajeroProductos.html',
-        titulo=titulo,
-        productos=productos
-       
-    )
+    else:
+        return redirect(url_for('login'))
+#------------------------------VENTAS-------------------------------------------------
+@app.route('/cajero/ventas')
+@login_required
+def cajeroVentas():
+        if current_user.tipo == 'cajero':
+         return render_template('cajeroVentas.html')
+        else:
+            return redirect(url_for('login'))
 
 #---------------LOGIN--------------------
 @app.route('/login')

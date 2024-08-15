@@ -35,7 +35,7 @@
         {% if categorias %}
         {% for categoria in categorias %}
             <tr>
-                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('categoriasDetalles', id=categoria[0])}}"><i class="fas fa-eye"></i></a></td>
+                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('categoriasEditar', id=categoria[0])}}"><i class="fas fa-eye"></i></a></td>
                 <td>{{ categoria[1] }} 
                 </td>
                 <td>{{ categoria[2] }} 

@@ -70,7 +70,7 @@
         {% if cliente %}
         {% for cliente in cliente %}
             <tr>
-                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('clienteDetalles', id=cliente[0])}}"><i class="fas fa-eye"></i></a></td>
+                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('clienteEditar', id=cliente[0])}}"><i class="fas fa-eye"></i></a></td>
                 <td>{{ cliente[1] }} 
                 </td>
                 <td>{{ cliente[2] }} 

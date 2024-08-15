@@ -1,8 +1,7 @@
 {% extends './layout_cyk.html' %}
 {% block title %} {{titulo}} {% endblock %}
 {% block body %}
-<form method="post" action="{{ url_for('categoriasActualizar', id=categoria[0]) }}" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
     <header>
         <div class="logo">ROLKAR</div>
         <nav class="nav-bar">
@@ -22,6 +21,8 @@
             </div>
         </div>
     </header>
+    <form method="post" action="{{ url_for('categoriasActualizar', id=categoria[0]) }}" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
     <main>
         <h1>Editar una  Categoria</h1>
         <div class="form-container">

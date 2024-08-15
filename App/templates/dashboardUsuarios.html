@@ -59,7 +59,7 @@
         <tr>
             <th class="text-center">Ver <br></th>
             <th>Nombre usuario</th>
-            <th>Contrasenia</th>
+            <!--<th>Contraseña</th>-->
             <th>Tipo de usuario </th>
             <th>activo</th>
             <th class="text-center">Eliminar</th>
@@ -67,11 +67,11 @@
         {% if usuarios %}
         {% for usuario in usuarios %}
             <tr>
-                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('usuariosDetalles', id=usuario[0])}}"><i class="fas fa-eye"></i></a></td>
+                <td class="text-center"><a class="btn btn-sm btn-primary" href="{{url_for('usuariosEditar', id=usuario[0])}}"><i class="fas fa-eye"></i></a></td>
                 <td>{{ usuario[1] }} 
                 </td>
-                <td>{{ usuario[2] }} 
-                </td>
+               <!-- <td>{{ usuario[2] }} 
+                </td>-->
                 <td> {{ usuario[3] }}
                 </td>
                 <td> {{ usuario[4] }}
@@ -106,7 +106,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-            ¿Deseas eliminar a <strong>{{ usuario[1] }} {{ usuario[2] }} {{ usuario[3] }} </strong>?
+            ¿Deseas eliminar a <strong>{{ usuario[1] }} </strong>?
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
