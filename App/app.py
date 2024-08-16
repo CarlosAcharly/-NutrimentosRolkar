@@ -288,16 +288,25 @@ def productosDetalles(id):
 @app.route("/dashboard_proveedores")
 @login_required
 def dashboardProveedores():
-    
     if current_user.tipo == 'admin':
         titulo = "Proveedores"
+        search_query = request.args.get('buscar', '', type=str)  # Obtener el término de búsqueda
+
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT * FROM proveedor;')
+
+        # Modificar la consulta SQL para filtrar por nombre o apellido paterno
+        cur.execute('''SELECT * FROM proveedor 
+                       WHERE nombre ILIKE %s 
+                       OR ape_pat ILIKE %s 
+                       OR ape_mat ILIKE %s;''',
+                    ('%' + search_query + '%', '%' + search_query + '%', '%' + search_query + '%'))
+        
         proveedores = cur.fetchall()
         cur.close()
         conn.close()
-        return render_template('dashboardProveedores.html', titulo=titulo, proveedores=proveedores)
+
+        return render_template('dashboardProveedores.html', titulo=titulo, proveedores=proveedores, search_query=search_query)
     else:
         return redirect(url_for('login'))
 
@@ -411,17 +420,28 @@ def proveedorEliminar(id):
 @login_required
 def dashboardUsuarios():
     if current_user.tipo == 'admin':
-
         titulo = "Usuarios"
+        search_query = request.args.get('buscar', '', type=str)
+
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT * FROM usuarios;')
+        
+        if search_query:
+            sql_count = 'SELECT COUNT(*) FROM usuarios WHERE username ILIKE %s OR tipo_usuario ILIKE %s'
+            sql_lim = 'SELECT * FROM usuarios WHERE username ILIKE %s OR tipo_usuario ILIKE %s'
+            search_term = f'%{search_query}%'
+            cur.execute(sql_lim, (search_term, search_term))
+        else:
+            cur.execute('SELECT * FROM usuarios')
+        
         usuarios = cur.fetchall()
         cur.close()
         conn.close()
-        return render_template('dashboardUsuarios.html', titulo=titulo, usuarios=usuarios)
+
+        return render_template('dashboardUsuarios.html', titulo=titulo, usuarios=usuarios, search_query=search_query)
     else:
         return redirect(url_for('login'))
+
     
 @app.route("/usuarios_nuevo")
 @login_required
@@ -532,17 +552,29 @@ def usuarioEliminar(id):
 @login_required
 def dashboardClientes():
     if current_user.tipo == 'admin':
-
         titulo = "Clientes"
+        search_query = request.args.get('buscar', '', type=str)
+
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT * FROM cliente;')
+
+        if search_query:
+            sql_count = 'SELECT COUNT(*) FROM cliente WHERE nombre ILIKE %s OR ape_pat ILIKE %s'
+            sql_lim = 'SELECT * FROM cliente WHERE nombre ILIKE %s OR ape_pat ILIKE %s'
+            search_term = f'%{search_query}%'
+            cur.execute(sql_lim, (search_term, search_term))
+        else:
+            cur.execute('SELECT * FROM cliente')
+
         clientes = cur.fetchall()
         cur.close()
         conn.close()
+        
         return render_template('dashboardCliente.html', titulo=titulo, cliente=clientes)
     else:
         return redirect(url_for('login'))
+
+
     
 @app.route("/cliente_nuevo")
 @login_required
@@ -651,21 +683,29 @@ def clienteEliminar(id):
 
 #-----------------Categoria--------------------------
 
-@app.route("/dashboard_categoria")
+@app.route("/dashboard_categoria", methods=['GET', 'POST'])
 @login_required
 def dashboardCategorias():
     if current_user.tipo == 'admin':
-
         titulo = "Categorias"
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('SELECT * FROM categorias;')
+        
+        # Manejar búsqueda
+        search_query = request.args.get('search', '')
+        if search_query:
+            cur.execute('SELECT * FROM categorias WHERE nombre LIKE %s;', ('%' + search_query + '%',))
+        else:
+            cur.execute('SELECT * FROM categorias;')
+        
         categorias = cur.fetchall()
         cur.close()
         conn.close()
-        return render_template('dashboardCategorias.html', titulo=titulo, categorias=categorias)
+        
+        return render_template('dashboardCategorias.html', titulo=titulo, categorias=categorias, search_query=search_query)
     else:
         return redirect(url_for('login'))
+
         
 @app.route("/categorias_nuevo")
 @login_required
