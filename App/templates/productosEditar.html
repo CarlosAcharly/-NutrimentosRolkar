@@ -44,7 +44,9 @@
 
             <label for="precio">Precio del Producto</label>
             <input type="number" id="precio" placeholder="Precio" name="precio" value="{{ producto[3] }}">
-
+            
+            <label for="cantidad">Cantidad</label>
+            <input type="number" id="cantidad" name="cantidad" value="{{ producto.cantidad }}">
             
             <input type="hidden" name="anterior" value="{{producto.7}}">
 
@@ -75,9 +77,7 @@
             <label for="fecha_caducidad">Fecha de caducidad</label>
             <input type="date" id="fecha_caducidad" placeholder="Fecha caducidad" name="fecha_caducidad" value="{{ producto[4] }}">
             
-            <label for="cantidad">Cantidad</label>
-            <input type="number" id="cantidad" placeholder="Cantidad" name="Cantidad" value="{{ producto[8] }}">
-
+            </form>
             <center>
                 <button id="add-product" type="submit">Guardar</button>
                 <a class="btn btn-outline-danger d-inline-flex align-items-center" id="add-other" href="{{url_for('dashboardProductos')}}">

@@ -187,14 +187,14 @@ def productosCrear():
         fecha_caducidad = request.form['fecha_caducidad']
         proveedor = request.form['id_proveedor']
         categoria = request.form['id_categoria']
-        #cantidad = request.form['cantidad']
+        cantidad = request.form['cantidad']
         
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO productos (nombre, marca, precio, fecha_cad, fk_proveedor, fk_categoria)'
-                    'VALUES (%s, %s, %s, %s, %s, %s)',
-                    (nombre, marca, precio,fecha_caducidad, proveedor, categoria))
+        cur.execute('INSERT INTO productos (nombre, marca, precio, fecha_cad, fk_proveedor, fk_categoria, cantidad)'
+                    'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                    (nombre, marca, precio,fecha_caducidad, proveedor, categoria,cantidad))
         conn.commit()
         cur.close()
         conn.close()
@@ -226,29 +226,27 @@ def productosEditar(id):
 @app.route('/dashboard/productos/actualizar/<string:id>', methods=['POST'])
 @login_required
 def productosActualizar(id):
-    if request.method == 'POST':
-        #id_producto=request.form['id_producto']
+     if request.method == 'POST':
         nombre = request.form['nombre']
         marca = request.form['marca']
         precio = request.form['precio']
        # categoria = request.form['categoria']
         fecha_caducidad = request.form['fecha_caducidad']
-        #cantidad = request.form['cantidad']
+        cantidad = request.form['cantidad']
 
-    
-    conn = get_db_connection()
-    cur = conn.cursor()
-    sql="UPDATE productos SET nombre=%s, marca=%s, precio=%s, fecha_cad=%s WHERE id_producto=%s"        
-    valores=(nombre, marca, precio, fecha_caducidad,id)
-    cur.execute(sql,valores)
-    conn.commit()
-    cur.close()
-    conn.close()
-        
-    flash('¡Producto actualizado exitosamente!')
+        conn = get_db_connection()
+        cur = conn.cursor()
+        sql="UPDATE productos SET nombre=%s, marca=%s, precio=%s, fecha_cad=%s, cantidad=%s WHERE id_producto=%s"
+        valores=(nombre, marca, precio, fecha_caducidad, cantidad, id)
 
-    return redirect(url_for('dashboardProductos'))
+        cur.execute(sql,valores)
+        conn.commit()
+        cur.close()
+        conn.close()
 
+        flash('¡Producto actualizado exitosamente!')
+
+        return redirect(url_for('dashboardProductos'))
 
 
 @app.route('/dashboard/productos/eliminar/<string:id>')
