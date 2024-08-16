@@ -14,9 +14,9 @@
                     <button type="submit" class="btn btn-primary">Corte de caja</button>
                 </form>
 
-            <form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
+            <!--<form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
                 <button type="submit" class="btn btn-primary">Clientes</button>
-            </form>
+            </form>-->
                     <select id="product-menu">
                         <option value="usuario">Ventas</option>
                     </select>
@@ -58,5 +58,7 @@
             <button onclick="guardarTicket()">Guardar e Imprimir Ticket</button>
         </div>
     </div>
+    <div class="col text"><a href="{{ url_for('logout') }}" class="btn btn-primary"> Cerrar Sesión</a></div>
+
     <script src="scripts.js"></script>
 {% endblock %}

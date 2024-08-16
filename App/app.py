@@ -25,8 +25,8 @@ def get_db_connection():
     try:
         conn = psycopg2.connect(host='localhost',
                                 dbname='nutrimentosRolkar1',
-                               user=os.environ['DB_Usuario'],
-                                password=os.environ['DB_Contrasenia'])                   
+                               user='postgres',
+                                password='admin')                   
         return conn
     except psycopg2.Error as error:
         print(f"Error al conectar la base de datos:{error}")
@@ -926,4 +926,4 @@ if __name__ == '__main__':
     csrf.init_app(app)
     app.register_error_handler(404, pagina_no_encontrada)
     app.register_error_handler(401, pagina_no_encontrada)
-    app.run(debug=True, port=5000)
+    app.run(host='0.0.0.0', port=5000)
