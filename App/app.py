@@ -24,7 +24,7 @@ csrf= CSRFProtect()
 def get_db_connection():
     try:
         conn = psycopg2.connect(host='localhost',
-                                dbname='nutrimentosRolkar1',
+                                dbname='nutrimentosrolkar1',
                                user='postgres',
                                 password='admin')                   
         return conn
