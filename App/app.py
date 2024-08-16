@@ -24,7 +24,7 @@ csrf= CSRFProtect()
 def get_db_connection():
     try:
         conn = psycopg2.connect(host='localhost',
-                                dbname='nutrimentosRolkar',
+                                dbname='nutrimentosRolkar1',
                                user=os.environ['DB_Usuario'],
                                 password=os.environ['DB_Contrasenia'])                   
         return conn
@@ -180,21 +180,21 @@ def productosNuevo():
 @login_required
 def productosCrear():
     if request.method == 'POST':
-        id_producto=request.form['id_producto']
+        #id_producto=request.form['id_producto']
         nombre = request.form['nombre']
         marca = request.form['marca']
         precio = request.form['precio']
         fecha_caducidad = request.form['fecha_caducidad']
         proveedor = request.form['id_proveedor']
         categoria = request.form['id_categoria']
-       # cantidad = request.form['cantidad']
+        #cantidad = request.form['cantidad']
         
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO productos (id_producto, nombre, marca, precio, fecha_cad, fk_proveedor, fk_categoria)'
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s)',
-                    (id_producto, nombre, marca, precio,fecha_caducidad, proveedor, categoria))
+        cur.execute('INSERT INTO productos (nombre, marca, precio, fecha_cad, fk_proveedor, fk_categoria)'
+                    'VALUES (%s, %s, %s, %s, %s, %s)',
+                    (nombre, marca, precio,fecha_caducidad, proveedor, categoria))
         conn.commit()
         cur.close()
         conn.close()
@@ -227,7 +227,7 @@ def productosEditar(id):
 @login_required
 def productosActualizar(id):
     if request.method == 'POST':
-        id_producto=request.form['id_producto']
+        #id_producto=request.form['id_producto']
         nombre = request.form['nombre']
         marca = request.form['marca']
         precio = request.form['precio']
@@ -239,7 +239,7 @@ def productosActualizar(id):
     conn = get_db_connection()
     cur = conn.cursor()
     sql="UPDATE productos SET nombre=%s, marca=%s, precio=%s, fecha_cad=%s WHERE id_producto=%s"        
-    valores=(nombre, marca, precio, fecha_caducidad, id_producto)
+    valores=(nombre, marca, precio, fecha_caducidad,id)
     cur.execute(sql,valores)
     conn.commit()
     cur.close()
@@ -327,13 +327,13 @@ def proveedoresCrear():
         direccion = request.form['direccion']
         correo = request.form['correo']
         cp = request.form['cp']
-        id_proveedor=request.form['id_proveedor']
+        #id_proveedor=request.form['id_proveedor']
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO proveedor (id_proveedor, nombre, ape_pat, ape_mat, marca, telefono, direccion, correo, cp)'
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                    (id_proveedor, nombre, paterno, materno, marca, telefono, direccion, correo, cp))
+        cur.execute('INSERT INTO proveedor (nombre, ape_pat, ape_mat, marca, telefono, direccion, correo, cp)'
+                    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+                    (nombre, paterno, materno, marca, telefono, direccion, correo, cp))
         conn.commit()
         cur.close()
         conn.close()
@@ -361,7 +361,7 @@ def proveedoresEditar(id):
 @login_required
 def proveedoresActualizar(id):
     if request.method == 'POST':
-        id_proveedor=request.form['id_proveedor']
+        #id_proveedor=request.form['id_proveedor']
         nombre = request.form['nombre']
         paterno = request.form['paterno']
         materno = request.form['materno']
@@ -375,7 +375,7 @@ def proveedoresActualizar(id):
         conn = get_db_connection()
         cur = conn.cursor()
         sql="UPDATE proveedor SET nombre=%s, ape_pat=%s, ape_mat=%s, marca=%s,  telefono=%s, direccion=%s, correo=%s, cp=%s WHERE id_proveedor=%s"        
-        valores=( nombre, paterno, materno, marca, telefono, direccion, correo, cp, id_proveedor)
+        valores=( nombre, paterno, materno, marca, telefono, direccion, correo, cp, id)
         cur.execute(sql,valores)
         conn.commit()
         cur.close()
@@ -452,7 +452,7 @@ def usuariosNuevo():
 @login_required
 def usuariosCrear():
     if request.method == 'POST':
-        id_usuario = request.form['id_usuario']
+        #id_usuario = request.form['id_usuario']
         username = request.form['username']
         password = request.form['password']
         tipo_usuario = request.form['tipo_usuario']
@@ -463,9 +463,9 @@ def usuariosCrear():
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO usuarios (id_usuario, username, password, tipo_usuario, activo)'
-                    'VALUES (%s, %s, %s, %s, %s)',
-                    (id_usuario, username, password_hashed, tipo_usuario, activo))
+        cur.execute('INSERT INTO usuarios (username, password, tipo_usuario, activo)'
+                    'VALUES (%s, %s, %s, %s)',
+                    (username, password_hashed, tipo_usuario, activo))
         conn.commit()
         cur.close()
         conn.close()
@@ -493,7 +493,7 @@ def usuariosEditar(id):
 @login_required
 def usuariosActualizar(id):
     if request.method == 'POST':
-        id_usuario=request.form['id_usuario']
+        #id_usuario=request.form['id_usuario']
         username = request.form['username']
         password = request.form['password']
         tipo_usuario = request.form['tipo_usuario']
@@ -585,7 +585,7 @@ def clienteNuevo():
 @login_required
 def clienteCrear():
     if request.method == 'POST':
-        id_cliente=request.form['id_cliente']
+        #id_cliente=request.form['id_cliente']
         nombre = request.form['nombre']
         paterno = request.form['paterno']
         materno = request.form['materno']
@@ -596,9 +596,9 @@ def clienteCrear():
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute('INSERT INTO cliente (id_cliente, nombre, ape_pat, ape_mat, direccion, telefono, correo, cp)'
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                    (id_cliente, nombre, paterno, materno,direccion, telefono, correo, cp))
+        cur.execute('INSERT INTO cliente (nombre, ape_pat, ape_mat, direccion, telefono, correo, cp)'
+                    'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                    (nombre, paterno, materno,direccion, telefono, correo, cp))
         conn.commit()
         cur.close()
         conn.close()
@@ -626,7 +626,7 @@ def clienteEditar(id):
 @login_required
 def clienteActualizar(id):
     if request.method == 'POST':
-        id_cliente=request.form['id_cliente']
+        #id_cliente=request.form['id_cliente']
         nombre = request.form['nombre']
         paterno = request.form['paterno']
         materno = request.form['materno']
@@ -640,7 +640,7 @@ def clienteActualizar(id):
         conn = get_db_connection()
         cur = conn.cursor()
         sql="UPDATE cliente SET nombre=%s, ape_pat=%s, ape_mat=%s, direccion=%s, telefono=%s , correo=%s, cp=%s WHERE id_cliente=%s"        
-        valores=( nombre, paterno, materno, direccion, telefono, correo, cp, id_cliente)
+        valores=( nombre, paterno, materno, direccion, telefono, correo, cp, id)
         cur.execute(sql,valores)
         conn.commit()
         cur.close()

@@ -81,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 // Simulación de una lista de productos. En un entorno real, esto vendría de una API.
 const productos = [
-    { id: 1, nombre: 'Producto 1', marca: 'Marca 1', precio: 10 },
-    { id: 2, nombre: 'Producto 2', marca: 'Marca 2', precio: 20 },
+    { id: 1, nombre: 'Maiz', marca: 'Molido', precio: 250 },
+    { id: 2, nombre: 'Lechero', marca: 'Nogal', precio: 320 },
     // Agregar más productos aquí
 ];
 
