@@ -108,7 +108,7 @@
 
 
 
-    <a href="{{url_for('inicioSesion')}}">Inicio</a>
+<div class="col text"><a href="{{ url_for('logout') }}" class="btn btn-primary"> Cerrar Sesión</a></div>
 
     {% if proveedores %}
     {% for proveedor in proveedores %}

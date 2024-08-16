@@ -187,6 +187,7 @@ def productosCrear():
         fecha_caducidad = request.form['fecha_caducidad']
         proveedor = request.form['id_proveedor']
         categoria = request.form['id_categoria']
+       # cantidad = request.form['cantidad']
         
 
         conn = get_db_connection()
@@ -232,6 +233,8 @@ def productosActualizar(id):
         precio = request.form['precio']
        # categoria = request.form['categoria']
         fecha_caducidad = request.form['fecha_caducidad']
+        #cantidad = request.form['cantidad']
+
     
     conn = get_db_connection()
     cur = conn.cursor()
@@ -265,33 +268,7 @@ def productoEliminar(id):
     flash('¡Producto eliminado correctamente!')
     return redirect(url_for('dashboardProductos'))
 
-@app.route('/dashboard/alumnos/eliminar/foto/<string:foto>/<string:id>')
-@login_required
-def alumnos_eliminar_foto(foto,id):
-    if current_user.tipo == True:
-        foto_anterior = os.path.join(ruta_alumnos,foto)
-        editado = datetime.now()
-        conn = get_db_connection()
-        cur = conn.cursor()
-        #sql="DELETE FROM alumnos WHERE id_alumno={0}".format(id)
-        sql="UPDATE productos SET imagen=%s, editado=%s WHERE id_alumno=%s"
-        valores=("",editado,id)
-        cur.execute(sql,valores)
-        conn.commit()
-        cur.close()
-        conn.close()
-        #Eliminar foto de perfil antigua
-        print(foto_anterior)
-        if foto != "":
-            if os.path.exists(foto_anterior):
-                os.remove(foto_anterior)
-                flash('¡Foto eliminada correctamente!')
-                return redirect(url_for('alumnos_editar', id=id))
-        else:
-            flash('Error: ¡No se puede ejecutar esta acción!')
-            return redirect(url_for('alumnos_editar', id=id))
-    else:
-        return redirect(url_for('alumnos_dashboard'))
+
 
 @app.route("/productos_detalles/<string:id>")
 @login_required
@@ -501,12 +478,15 @@ def usuariosActualizar(id):
         password = request.form['password']
         tipo_usuario = request.form['tipo_usuario']
         activo= request.form['activo']
-        
+
+                # Hashear la contraseña antes de guardarla en la base de datos
+        password_hashed = generate_password_hash(password)
+
 
         conn = get_db_connection()
         cur = conn.cursor()
         sql="UPDATE usuarios SET username=%s, password=%s, tipo_usuario=%s, activo=%s WHERE id_usuario=%s"        
-        valores=( username, password, tipo_usuario, activo, id)
+        valores=( username, password_hashed, tipo_usuario, activo, id)
         cur.execute(sql,valores)
         conn.commit()
         cur.close()

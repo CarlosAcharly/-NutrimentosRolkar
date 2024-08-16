@@ -23,7 +23,7 @@
         <button>Reportes</button>
     </nav>
     <div class="user-info">
-        <span id="user-dropdown" class="dropdown">Admin@Uri</span>
+        <a id="user-dropdown" class="dropdown" href="{{ url_for('static', filename='img/manual.pdf') }}" target="_blank">Ayuda</a>
         <div class="user-icon"></div>
         <div id="dropdown-menu" class="dropdown-content">
             <a href="#" id="logout">Cerrar sesión</a>
@@ -50,7 +50,10 @@
     <div class="col"><h2>{{titulo}}</h2></div>
     <div class="col text-end"><a href="{{ url_for('productosNuevo') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Nuevo</a></div>
 </div>
-
+<div class="row">
+    <div class="col text-end"><a href="{{ url_for('dashboardCategorias') }}" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Categoria Nueva</a></div>
+    
+</div>
 <!-- Aquí agregamos el formulario de búsqueda -->
 <div class="row mb-3">
     <div class="col">
@@ -66,13 +69,14 @@
         <!-- Aquí se encuentra el código de la tabla -->
 
         <tr>
-            <th class="text-center">Ver <br></th>
+            <th class="text-center">Editar <br></th>
             <th>Nombre</th>
             <th>Marca</th>
             <th>Precio</th>
             <th>Fecha de caducidad</th>
             <th>Proveedor</th>
             <th>Categoria</th>
+            <th>Cantidad</th>
             <th class="text-center">Eliminar</th>
         </tr>
         {% if productos %}
@@ -85,6 +89,8 @@
                 <td>{{ producto.fecha_cad }}</td>
                 <td>{{ producto.nombre_proveedor }}</td>
                 <td>{{ producto.especie }}</td>
+                <td>{{ producto.cantidad }}</td>
+
                 <td class="text-center">
                     <a type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" href="#staticBackdrop-{{ producto.id_producto }}">
                         <i class="fas fa-trash-alt"></i>
@@ -122,8 +128,8 @@
       {% endif %}
     </ul>
 </nav>
+<div class="col text"><a href="{{ url_for('logout') }}" class="btn btn-primary"> Cerrar Sesión</a></div>
 
-<a class="dropdown-item" href="{{ url_for('logout') }}" class="btn btn-primary">Cerrar Sesión</a>
 
 {% if productos %}
 {% for producto in productos %}
