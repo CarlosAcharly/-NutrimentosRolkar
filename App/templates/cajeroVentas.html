@@ -4,61 +4,67 @@
 <header>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesForm.css') }}">
     <div class="logo">ROLKAR</div>
-        <nav class="nav-bar">
-            
-            <form action="{{ url_for('cajeroProductos') }}" method="get" style="display: inline;">
-                <button type="submit" class="btn btn-primary">Productos</button>
-            </form>
+    <nav class="nav-bar">
+        
+        <form action="{{ url_for('cajeroProductos') }}" method="get" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Productos</button>
+        </form>
 
-                <form action="{{ url_for('cajeroCorte') }}" method="get" style="display: inline;">
-                    <button type="submit" class="btn btn-primary">Corte de caja</button>
-                </form>
+        <form action="{{ url_for('cajeroCorte') }}" method="get" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Corte de caja</button>
+        </form>
 
-            <!--<form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
-                <button type="submit" class="btn btn-primary">Clientes</button>
-            </form>-->
-                    <select id="product-menu">
-                        <option value="usuario">Ventas</option>
-                    </select>
+        <!--<form action="{{ url_for('dashboardClientes') }}" method="get" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Clientes</button>
+        </form>-->
+        
+        <select id="product-menu">
+            <option value="usuario">Ventas</option>
+        </select>
 
-             <form action="{{ url_for('cajeroGastos') }}" method="get" style="display: inline;">
-                <button type="submit" class="btn btn-primary">Gastos</button>
-            </form>
-        </nav>
-        <div class="user-info">
-            <span id="user-dropdown" class="dropdown">Cajero@Rol</span>
-            <div class="user-icon"></div>
-            <div id="dropdown-menu" class="dropdown-content">
-                <a href="#" id="logout">Cerrar sesión</a>
-                <a href="#" id="help">Ayuda</a>
-            </div>
-        </div>
-</header>
-    <div class="container">
-        <h1>Sistema de Ventas</h1>
-        <input type="text" id="product-search" placeholder="Buscar producto">
-        <button onclick="addProduct()">Agregar Producto</button>
-        <table id="sales-table">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Total</th>
-                    <th>Acción</th>
-                </tr>
-            </thead>
-            <tbody id="sales-body">
-            </tbody>
-        </table>
-        <div class="totals">
-            <p>Total de la venta: <span id="total-venta">0.00</span></p>
-            <p>Pago: <input type="number" id="pago" step="0.01"></p>
-            <p>Cambio: <span id="cambio">0.00</span></p>
-            <button onclick="guardarTicket()">Guardar e Imprimir Ticket</button>
+        <form action="{{ url_for('cajeroGastos') }}" method="get" style="display: inline;">
+            <button type="submit" class="btn btn-primary">Gastos</button>
+        </form>
+    </nav>
+    <div class="user-info">
+        <span id="user-dropdown" class="dropdown">Cajero@Rol</span>
+        <div class="user-icon"></div>
+        <div id="dropdown-menu" class="dropdown-content">
+            <a href="#" id="logout">Cerrar sesión</a>
+            <a href="#" id="help">Ayuda</a>
         </div>
     </div>
-    <div class="col text"><a href="{{ url_for('logout') }}" class="btn btn-primary"> Cerrar Sesión</a></div>
+</header>
+<div class="container">
+    <h1>Sistema de Ventas</h1>
 
-    <script src="scripts.js"></script>
+    <!-- Botón en lugar de la barra de búsqueda -->
+    <form action="{{ url_for('cajeroProductos') }}" method="get">
+        <button type="submit" class="btn btn-primary">Buscar Producto</button>
+    </form>
+<br>
+    <button onclick="addProduct()">Agregar Producto</button>
+    <table id="sales-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Total</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="sales-body">
+        </tbody>
+    </table>
+    <div class="totals">
+        <p>Total de la venta: <span id="total-venta">0.00</span></p>
+        <p>Pago: <input type="number" id="pago" step="0.01"></p>
+        <p>Cambio: <span id="cambio">0.00</span></p>
+        <button onclick="guardarTicket()">Guardar e Imprimir Ticket</button>
+    </div>
+</div>
+<div class="col text"><a href="{{ url_for('logout') }}" class="btn btn-primary"> Cerrar Sesión</a></div>
+
+<script src="scripts.js"></script>
 {% endblock %}

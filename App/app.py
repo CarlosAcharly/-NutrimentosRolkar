@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, url_for, redirect, request, flash, jsonify
 import os
 import uuid 
 import psycopg2
@@ -24,9 +24,9 @@ csrf= CSRFProtect()
 def get_db_connection():
     try:
         conn = psycopg2.connect(host='localhost',
-                                dbname='nutrimentosrolkar1',
-                               user='postgres',
-                                password='admin')                   
+                                dbname='nutrimentosRolkar1',
+                               user=os.environ['DB_Usuario'],
+                                password=os.environ['DB_Contrasenia'])                   
         return conn
     except psycopg2.Error as error:
         print(f"Error al conectar la base de datos:{error}")
@@ -827,6 +827,8 @@ def cajeroGastos():
         return render_template('cajeroGastos.html')
     else:
         return redirect(url_for('login'))
+    
+    
 
 @app.route('/cajero/dashboardProductos')
 @login_required
@@ -871,14 +873,101 @@ def cajeroProductos():
     
     else:
         return redirect(url_for('login'))
+    
+@app.route('/agregarProductoVenta/<int:id>', methods=['GET', 'POST'])
+@login_required
+def agregarProductoVenta(id):
+    if current_user.tipo == 'cajero':
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)  # Usa RealDictCursor para obtener resultados como diccionario
+
+        # Verificar si hay una venta activa para el usuario actual
+        cur.execute('SELECT id_venta FROM ventas WHERE id_usuario = %s AND estado = %s', (current_user.id, 'pendiente'))
+        venta = cur.fetchone()
+
+        if not venta:
+            # Si no hay venta activa, crear una nueva
+            cur.execute('INSERT INTO ventas (id_usuario, estado) VALUES (%s, %s) RETURNING id_venta', (current_user.id, 'pendiente'))
+            venta_id = cur.fetchone()['id_venta']
+        else:
+            venta_id = venta['id_venta']
+
+        # Agregar el producto a la venta
+        cur.execute('INSERT INTO detalle_ventas (id_venta, id_producto, cantidad) VALUES (%s, %s, %s)', (venta_id, id, 1))
+
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        flash('Producto agregado a la venta.', 'success')
+        return redirect(url_for('cajeroProductos'))
+    
+    else:
+        return redirect(url_for('login'))
+@app.route('/get_product_data', methods=['POST'])
+@login_required
+def get_product_data():
+    product_id = request.form['product_id']
+    conn = get_db_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+
+    # Fetch product details
+    cur.execute('SELECT id_producto, nombre_producto, precio FROM vista_productos WHERE id_producto = %s', (product_id,))
+    product = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if product:
+        return jsonify(product)
+    else:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+
+
 #------------------------------VENTAS-------------------------------------------------
-@app.route('/cajero/ventas')
+@app.route('/cajero/ventas', methods=['GET', 'POST'])
 @login_required
 def cajeroVentas():
-        if current_user.tipo == 'cajero':
-         return render_template('cajeroVentas.html')
-        else:
-            return redirect(url_for('login'))
+    if current_user.tipo == 'cajero':
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        
+        if request.method == 'POST':
+            # Suponiendo que tienes datos del formulario para la venta
+            #id_usuario = current_user.id  # Asegúrate de usar el atributo 'id'
+            fk_producto = request.form['fk_producto']
+            cantidad_vendida = int(request.form['cantidad_vendida'])
+            total = float(request.form['total'])
+
+            # Insertar la venta en la tabla 'ventas'
+            cur.execute(
+                '''
+                INSERT INTO ventas (fk_producto, cantidad_vendida, total)
+                VALUES (%s, %s, %s, %s)
+                RETURNING id_venta;
+                ''',
+                (fk_producto, cantidad_vendida, total)
+            )
+
+            # El trigger se ejecutará automáticamente y reducirá la cantidad en la tabla 'productos'
+            conn.commit()  # Confirmar la transacción para asegurar que el trigger se ejecute
+            
+            flash('Venta registrada y cantidad de producto actualizada!', 'success')
+            return redirect(url_for('cajeroVentas'))
+        
+        # Consulta de ventas para el usuario actual
+        cur.execute('SELECT * FROM ventas')
+        ventas = cur.fetchall()
+
+        cur.close()
+        conn.close()
+
+        return render_template('cajeroVentas.html', ventas=ventas)
+    
+    else:
+        return redirect(url_for('login'))
+
+
 
 #---------------LOGIN--------------------
 @app.route('/login')
@@ -926,4 +1015,4 @@ if __name__ == '__main__':
     csrf.init_app(app)
     app.register_error_handler(404, pagina_no_encontrada)
     app.register_error_handler(401, pagina_no_encontrada)
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True, port=5000)
